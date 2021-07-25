@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX POST request</title>
+    <style>
+      #result{
+        width: 200px;
+        height: 100px;
+        border: solid 1px #903;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="result"></div>
+
+    <script>
+      //獲取元素
+      const result = document.getElementById("result");
+
+      function postRequest(){
+        // console.log("test");
+        //1. 創建對象,發送請求
+        const xhr = new XMLHttpRequest();
+        //2. 初始化 設置請求類型與URL
+        xhr.open('POST','http://127.0.0.1:8000/server');
+        //設置 response header
+        xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+        //設置自定義 response header
+        xhr.setRequestHeader('name','snoppy');
+
+        //3.發送
+        xhr.send('a=100&b=200&c=300');
+        // xhr.send('a:100&b:200&c:300');
+        // xhr.send('123456654123');
+        //4. 事件綁定
+        xhr.onreadystatechange = function () {
+          //判斷
+          if (xhr.readyState === 4) {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              //處理服務端返回的結果
+              result.innerHTML = xhr.response;
+            }
+          }
+        }
+      }
+      //綁定事件 mouse move above
+      result.addEventListener("mouseover", postRequest)
+
+    </script>
+  </body>
+</html>

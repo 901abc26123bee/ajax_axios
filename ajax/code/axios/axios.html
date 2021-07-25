@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>axios send AJAX request</title>
+    <script crossorigin="anonymous" src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.js"></script>
+  </head>
+  <body>
+    <button>GET</button>
+    <button>POST</button>
+    <button>AJAX</button>
+
+    <script>
+      const btns = document.querySelectorAll('button');
+      //配置 baseURL
+      axios.defaults.baseURL = 'http://127.0.0.1:8000';
+
+      btns[0].onclick = function () {
+        //GET  request
+        axios.get('/axios-server', {
+          //url參數
+          params: {
+            id: 100,
+            vip: 7
+          },
+          // request頭信息
+          headers: {
+            name: 'snoopy',
+            age: 20
+          }
+          //Axios是基於Promise作的數據處理
+        }).then(value => {
+          console.log(value)
+        })
+      }
+
+      btns[1].onclick = function () {
+        axios.post('/axios-server', {
+          // request體
+          username: 'admin',
+          password: '123456'
+        }, {
+          //url  request行
+          params: {
+            id: 200,
+            vip: 9
+          },
+          // request頭參數
+          headers: {
+            height: 100,
+            weight: 180,
+          }
+        })
+      }
+
+      btns[2].onclick = function () {
+        axios({
+          // request方法
+          method: 'POST',
+          //url  request行
+          url: '/axios-server',
+          //url參數
+          params: {
+            vip:10,
+            level:30
+          },
+          //頭信息
+          headers: {
+            a:100,
+            b:200
+          },
+          // request體參數
+          data: {
+            username: 'admin',
+            password: '123456'
+          }
+        }).then(response=>{
+          console.log(response);
+          //response狀態碼
+          console.log(response.status);
+          //response狀態字符串
+          console.log(response.statusText);
+          //response頭信息
+          console.log(response.headers);
+          //response體
+          console.log(response.data);
+        })
+      }
+    </script>
+  </body>
+</html>

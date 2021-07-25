@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IE緩存問題</title>
+    <style>
+      #result{
+        width: 200px;
+        height: 100px;
+        border: solid 1px #225588;
+      }
+    </style>
+  </head>
+  <body>
+    <button>點擊發送請求</button>
+    <div id="result"></div>
+    <script>
+      const btn = document.getElementsByTagName('button')[0];
+      const result = document.querySelector('#result');
+
+      btn.addEventListener('click', function () {
+        // console.log('test');
+        //1. 創建ajax對象
+        const xhr = new XMLHttpRequest();
+        //2. 初始化請求
+        //AJAX解決IE緩存問題：加一個可變化的參數，比如時間戳
+        xhr.open('GET','http://127.0.0.1:8000/ie?t='+Date.now());
+        //3. 發送請求
+        xhr.send();
+        //4. 處理數據
+        xhr.onreadystatechange = function () {
+          //兩個判斷
+          if (xhr.readyState === 4) {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              result.innerHTML = xhr.response;
+            }
+          }
+        }
+      })
+
+    </script> 
+  </body>
+</html>

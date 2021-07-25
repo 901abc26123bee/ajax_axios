@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <script>
+    let cancel // 用於保存取消request的函數
+    function getProducts1() {
+      axios({
+        url: 'http://localhost:4000/products1',
+        cancelToken: new axios.CancelToken(function executor(c){ // c是用於取消當前request的函數
+          // 保存取消函數，用於之後可能需要取消當前request
+          cancel = c;
+        })
+      }).then(
+        response => {
+          cancel = null
+          console.log('request1成功了', response.data)
+        },
+        error => {
+          cancel = null
+          console.log('request1失敗了', error.message, error) // request1失敗了 強制取消request Cancel {message: "強制取消request"}
+        }
+      )
+
+    }
+
+    function getProducts2() {
+      axios({
+          url: 'http://localhost:4000/products2'
+      }).then(
+        response => {
+          console.log('request2成功了', response.data)
+        }
+      )
+    }
+
+    function cancelReq() {
+      // alert('取消request')
+      // 執行取消request的函數
+      if (typeof cancel === 'function'){
+        cancel('強制取消request')
+      } else {
+        console.log('沒有可取消的request')
+      }
+    }
+  </script>
+</body>
+</html>

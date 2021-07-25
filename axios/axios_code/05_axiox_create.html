@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <script>
+    // condition : need to get data from different url/port
+    //axios.defaults.baseURL = 'http://localhost:4000'
+    // axios({
+    //   url: '/posts'
+    // })
+    
+    // 創建新axios,有自己特有的配置,suit for 不同要求的接口請求中
+    // see the Network in devtool in chrome
+    const instance = axios.create({ // instance是函數類型
+      baseURL: 'http://localhost:3000'
+    })
+    // 使用instance發Ajax請求
+    instance({
+      url: '/posts'
+    })
+    instance.get('/posts')
+  </script>
+</body>
+</html>

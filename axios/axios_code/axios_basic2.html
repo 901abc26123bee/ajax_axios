@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div>
+    <button>GET</button>
+    <button>POST</button>
+    <button>PUT</button>
+    <button>DELETE</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const btns = document.querySelectorAll('button')
+    btns[0].onclick = function(){
+      axios.request({
+        method: 'GET',
+        url: 'http://localhost:3000/comments',
+      }).then(response => {
+        console.log('get ', response)
+      })
+    }
+
+    btns[1].onclick = function(){
+      axios.post(
+        'http://localhost:3000/comments',
+        {
+          "body": "post a data",
+          "postId": "2"
+        }).then(response => {
+          console.log('posts ', response)
+        })
+    }
+
+    btns[2].onclick = function(){
+      axios({
+        method: 'PUT',
+        url: 'http://localhost:3000/posts/3',
+        data: {
+          title: "post a data",
+          author: "Atom"
+        }
+      }).then(response => {
+        console.log('put ', response)
+      })
+    }
+
+    btns[3].onclick = function(){
+      axios({
+        method: 'DELETE',
+        url: 'http://localhost:3000/posts/3',
+      }).then(response => {
+        console.log('delete ', response)
+      })
+    }
+  </script>
+</body>
+</html>

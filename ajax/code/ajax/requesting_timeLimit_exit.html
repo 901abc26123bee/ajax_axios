@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>request out of time & network out of connecting</title>
+    <style>
+      #result {
+        width: 200px;
+        height: 100px;
+        border: solid 1px #90b;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button>click to send</button>
+    <div id="result"></div>
+    <script>
+      const btn = document.getElementsByTagName('button')[0];
+      const result = document.querySelector('#result');
+      btn.addEventListener('click', function () {
+        const xhr = new XMLHttpRequest();
+        //超時設置 2s 設置(2s內服務端不response，cancel 請求)
+        xhr.timeout = 2000;
+        //超時回調
+        xhr.ontimeout = function () {
+          alert('request out of time, try again!!');
+
+        }
+        //網絡異常回調
+        xhr.onerror = function () {
+          alert('network connecting problem！');
+        }
+        xhr.open('GET', 'http://127.0.0.1:8000/delay');
+        xhr.send();
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              result.innerHTML = xhr.response;
+            }
+          }
+        }
+      })
+    </script>
+  </body>
+
+</html>

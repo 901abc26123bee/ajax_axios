@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX request repeat problem</title>
+  </head>
+  <body>
+    <button>click to send</button>
+    <button>click cancle</button>
+    <script>
+      //獲取元素對象
+      const btns = document.querySelectorAll('button');
+      let x = null;
+      //標識變量
+      let isSending = false;// 是否正在發送AJAX請求
+
+      btns[0].onclick = function () {
+        //判斷標識變量
+        if (isSending) x.abort();//如果該請求正在發送，則取消該請求，創建一個新的請求
+
+        x = new XMLHttpRequest();
+        //修改 標識變量的值
+        isSending = true;
+        x.open('GET', 'http://127.0.0.1:8000/delay');
+        x.send();
+        x.onreadystatechange = function () {
+          if (x.readyState === 4) {
+            //修改標識變量
+            //這裡不用判斷response狀態碼，因為這個請求可能是失敗的請求
+            isSending = false;
+          }
+        }
+      }
+
+      //abort （屬於AJAX對象的一個方法）取消請求
+      //這裡的 x 用 let 而不用const
+      btns[1].onclick = function () {
+        x.abort();
+      }
+    </script>
+
+  </body>
+</html>

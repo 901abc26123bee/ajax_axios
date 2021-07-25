@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原生JSONP 實踐案例</title>
+  </head>
+  <body>
+    User name: <input type="text" id="username" >
+    <p></p>
+    <script>
+      //獲取input元素
+      const input = document.querySelector('input');
+      const p = document.querySelector('p');
+
+      //聲明 handle 函數
+      function handle(data){
+        //修改邊框顏色
+        input.style.border = "solid 1px #f00";
+        //修改 p 標籤的提交文本
+        p.innerHTML = data.msg;
+      }
+
+      //綁定事件
+      input.onblur = function () {
+        //獲取用戶的輸入值
+        let username = this.value;
+        //向服務端發送請求 檢測用戶名是否存在
+        //1. 創建 script 標籤
+        const script = document.createElement('script');
+        //2. 設置 script 標籤的src屬性
+        script.src = 'http://127.0.0.1:8000/check-username';
+        //3. 將 script 插入到文檔中
+        document.body.appendChild(script);
+      }
+    </script>
+  </body>
+</html>

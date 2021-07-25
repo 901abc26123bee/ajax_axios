@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX GET request</title>
+    <style>
+      #result {
+        width: 200px;
+        height: 100px;
+        border: solid 1px #90b;
+
+      }
+    </style>
+  </head>
+
+  <body>
+    <button>click to send request</button>
+    <div id="result"></div>
+
+    <script>
+      // get button
+      const btn = document.getElementsByTagName('button')[0];
+      const result = document.getElementById("result");
+      //綁定事件
+      btn.onclick = function () {
+        //1. 創建AJAX object
+        const xhr = new XMLHttpRequest();
+        //2. 設置請求方法和url
+        xhr.open('GET', 'http://127.0.0.1:8000/server?a=100&b=200&C=300');
+        //3. send
+        xhr.send();
+        //4. 事件綁定 處理服務端返回的結果
+        /*
+            on：when：當...時候
+            readystate： 是XHR object中的一個屬性，表示狀態：
+                        0（未初始化）
+                        1（open方法調用完畢）
+                        2（send方法調用完畢）
+                        3（服務端返回部分結果）
+                        4（服務端返回所有結果）
+            change：改變
+            */
+        xhr.onreadystatechange = function () {
+          //作判斷，是4(服務端返回了所有的結果)才處理數據
+          if (xhr.readyState === 4) {
+            //判斷response狀態碼：200 404 403 401 500
+            //2XX 都是成功
+            if (xhr.status >= 200 && xhr.status < 300) {
+              //處理服務端response結果： 行 頭  空行（ignore） 體
+              //1. 處理response行
+              // console.log(xhr.status);//狀態碼
+              // console.log(xhr.statusText);//狀態字符串
+              // //2. 所有response head
+              // console.log(xhr.getAllResponseHeaders());
+              // //3. response body
+              // console.log(xhr.response)
+              //設置result的文本
+              result.innerHTML = xhr.response;
+            } else {
+            }
+          }
+        }
+        console.log('test');
+      }
+    </script>
+  </body>
+
+</html>

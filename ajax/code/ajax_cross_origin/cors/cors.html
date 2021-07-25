@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home page</title>
+  </head>
+  <body>
+    <h1>snoopy</h1>
+    <button>click to get user info</button>
+    <script>
+      const btn = document.querySelector('button');
+
+      btn.onclick = function(){
+        const x = new XMLHttpRequest();
+        //這裡因為是滿足同源策略的，所以url可以簡寫
+        x.open("GET",'/data');
+        //發送
+        x.send();
+        //
+        x.onreadystatechange = function () {
+          if (x.readyState === 4) {
+            if(x.status >= 200 && x.status < 300){
+              console.log(x.response);
+            }
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

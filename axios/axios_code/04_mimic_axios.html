@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div>
+    <button onclick="testGet()">GET</button>
+    <button onclick="testPost()">POST</button>
+    <button onclick="testPut()">PUT</button>
+    <button onclick="testDelete()">DELETE</button>
+  </div>
+
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.js"></script>
+  <script src="./04_test_own_axios.js"></script>
+  <script>
+    function axios({
+      url,
+      method='GET',
+      params={},
+      data={}
+    }){
+      // 返回一個promise對象
+      return new Promise((resolve, reject) => {
+
+        // 處理method 轉大寫
+        method = method.toUpperCase();
+
+        // 處理 query參數（拼接到url上）id=1&xxx=abc
+        let queryString = '';
+        Object.keys(params).forEach(key => {
+          queryString += `${key}=${params[key]}&`
+        });
+        if(queryString){
+          // 去除最後的'&'
+          queryString = queryString.substring(0, queryString.length-1)
+          // 接到url
+          url += '?' + queryString
+        }
+
+        // 1. 執行異步Ajax請求
+        // 創建xhr對象
+        const request = new XMLHttpRequest();
+        // 打開連接（初始化請求，沒有請求）
+        request.open(method, url, true);
+        // 發送請求
+        if(method === 'GET' || method === 'DELETE'){
+          request.send()// undefined
+        } else if (method === 'POST' || method === 'PUT'){
+          // 設置請求頭，告訴服務器請求體的格式是json
+          request.setRequestHeader('Content-Type', 'appliaction/json;charset=utf-8');
+          // 發送json格式請求參數
+          request.send(JSON.stringify(data)); // 異步執行
+        }
+        // 綁定狀態改變的監聽
+        request.onreadystatechange = function() { // 同步執行
+          // 如果請求沒有完成，直接結束
+          if (request.readyState !== 4) {
+            return;
+          }
+          // 如果響應狀態碼在[200, 300)之間代表成功，否則失敗
+          const {status, statusText} = request
+          if( status>= 200 && status<=299) {// 2.1 如果請求成功，調用resolve()
+            // 準備結果數據對象response
+            const response = {
+              data: JSON.parse(request.response),
+              status,
+              statusText
+            };
+            resolve(response);
+          } else {// 2.2 如果請求失敗，調用reject()
+            reject(new Error('request error status is ' + status));
+          }
+        }
+      })
+    }
+  </script>
+</body>
+</html>
